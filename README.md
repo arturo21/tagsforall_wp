@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # WordPress Plugin Boilerplate
 
 A standardized, organized, object-oriented foundation for building high-quality WordPress Plugins.
@@ -97,3 +98,7 @@ The homepage is based on a design as provided by [HTML5Up](http://html5up.net), 
 ## Documentation, FAQs, and More
 
 If you’re interested in writing any documentation or creating tutorials please [let me know](http://devinvinson.com/contact/) .
+=======
+# tagsforall_wp
+Tags4All - WP Plugin for SEO Stuff
+>>>>>>> b604cf8b82a36b5c0a1b6d7faf481f4ce83b7eff
