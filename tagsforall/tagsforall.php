@@ -352,7 +352,6 @@ ini_set('display_startup_errors', 0);/**
 							settings_fields('youtube-tagsforall-group');
 						  	do_settings_sections('youtube-tagsforall-group');
 							break;
-				  	}
 					case "hubspot":
 							?>
 							  	<label>Account Number Hubspot</label><br>
