@@ -160,24 +160,26 @@ ini_set('display_startup_errors', 0);/**
 	function global_notice_meta_box_tfa() {
 	    add_meta_box(
 	        'tagsforall-info-post',
-	        'Meta Info',
+	        'Tags4All Meta Info',
 	        'global_notice_meta_box_callback',
-	        'post'
+	        $screen
 	    );
 	}
 
 	function global_notice_meta_box_callback($post){
 		wp_nonce_field('tagsforall-info-post', 'tagsforall-info-post');
 		?>
-			<label>OG Title</label><br />
+			<label>Title</label><br />
             <input name="title-meta-box-text" id="title-meta-box-text" type="text" value="<?php echo(get_post_meta( $post->ID, 'titletagsforall', true )); ?>"><br />
-            <label>OG Description</label><br />
+            <label>Description</label><br />
             <input name="description-meta-box-text" id="description-meta-box-text" type="text" value="<?php echo(get_post_meta( $post->ID, 'descriptiontagsforall', true )); ?>"><br />
-            <label>OG Type</label><br />
+            <label>Keywords</label><br />
+            <input name="keywords-meta-box-text" id="keywords-meta-box-text" type="text" value="<?php echo(get_post_meta( $post->ID, 'keywordstagsforall', true )); ?>"><br />
+            <label>Type</label><br />
             <input name="type-meta-box-text" id="type-meta-box-text" type="text" value="<?php echo(get_post_meta( $post->ID, 'typetagsforall', true )); ?>"><br />
-            <label>OG Website</label><br />
+            <label>Website</label><br />
             <input name="website-meta-box-text" id="website-meta-box-text" type="text" value="<?php echo(get_post_meta( $post->ID, 'websitetagsforall', true )); ?>" placeholder="https://placeholder.com"><br />
-            <label>OG Image (URL)</label><br />
+            <label>Image (URL)</label><br />
             <input name="image-meta-box-text" id="image-meta-box-text" type="text" value="<?php echo(get_post_meta( $post->ID, 'imagetagsforall', true )); ?>" placeholder="https://placeholder.com/image.jpg"><br />
         <?php
 	}
@@ -187,6 +189,7 @@ ini_set('display_startup_errors', 0);/**
 		$datatype=get_post_meta($post_id, "typetagsforall");
 		$datawebs=get_post_meta($post_id, "websitetagsforall");
 		$dataimag=get_post_meta($post_id, "imagetagsforall");
+		$datakeywords=get_post_meta($post_id, "keywordstagsforall");
 		if(!empty($datatitle)){
 			update_post_meta($post_id, "titletagsforall",$_POST["title-meta-box-text"]);
 		}
@@ -216,6 +219,12 @@ ini_set('display_startup_errors', 0);/**
 		}
 		else{
 			add_post_meta($post_id, "imagetagsforall",$_POST["image-meta-box-text"], false);
+		}
+		if(!empty($datakeywords)){
+			update_post_meta($post_id, "keywordstagsforall",$_POST["keywords-meta-box-text"]);
+		}
+		else{
+			add_post_meta($post_id, "keywordstagsforall",$_POST["keywords-meta-box-text"], false);
 		}
 	}
 
