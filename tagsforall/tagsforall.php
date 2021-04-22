@@ -69,74 +69,59 @@ ini_set('display_startup_errors', 0);/**
 		$mypost_id = intval($post->ID);
 		$post_getdata=get_post($post->ID);
 		$descripciongeneral=get_option('webdesc');
-		$datatitle=get_post_meta($post_id, "titletagsforall");
-		$datadesc=get_post_meta($post_id, "descriptiontagsforall");
-		$datatype=get_post_meta($post_id, "typetagsforall");
-		$datawebs=get_post_meta($post_id, "websitetagsforall");
-		$dataimag=get_post_meta($post_id, "imagetagsforall");
-		$datakeywords=get_post_meta($post_id, "keywordstagsforall");
-
-	    ?>
-	    	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	    	<?php
-	    		if($descripciongeneral==''){
-	    			$descriptfinal=get_option('descripttfs');
-	    		}
-				else{
-					$descriptfinal=get_option('webdesc');
-				}
-	    	?>
-	    	<meta name="language" content="<?php echo(get_option('weblang')); ?>">
-			<meta name="author" content="<?php echo(get_option('webauthor')); ?>">
-			<meta name="subject" content="<?php echo(get_option('websubject')); ?>">
-			<meta name="classification" content="<?php echo(get_option('webclass')); ?>">
-			<meta http-equiv="Expires" content="<?php echo(get_option('webexpires')); ?>">
-			<meta name="copyright" content="<?php echo(get_option('webcopy')); ?>">
-			<meta name="designer" content="<?php echo(get_option('webdesign')); ?>">
-			<meta name="publisher" content="<?php echo(get_option('webpublish')); ?>">
-			<meta name="revisit-after" content="<?php echo(get_option('webrevisit')); ?>">
-			<meta name="distribution" content="<?php echo(get_option('webdist')); ?>">
-			<meta name="robots" content="<?php echo(get_option('webrobots')); ?>">
-			<meta name="city" content="<?php echo(get_option('webcity')); ?>">
-			<meta name="country" content="<?php echo(get_option('webcountry')); ?>">
-			<meta name="geography" content="<?php echo(get_option('webcity').",".get_option('webcountry')); ?>">
-	    <?php
+		$datatitle=get_post_meta($post->ID, "titletagsforall");
+		$datadesc=get_post_meta($post->ID, "descriptiontagsforall");
+		$datatype=get_post_meta($post->ID, "typetagsforall");
+		$datawebs=get_post_meta($post->ID, "websitetagsforall");
+		$dataimag=get_post_meta($post->ID, "imagetagsforall");
+		$datakeywords=get_post_meta($post->ID, "keywordstagsforall");
+	?>
+	    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<?php
+		if($descripciongeneral==''){
+			$descriptfinal=get_option('descripttfs');
+		}
+		else{
+			$descriptfinal=get_option('webdesc');
+		}
 	    if(!empty($mypost_id)){
 	    	if(is_numeric($mypost_id)){
 	    		if($mypost_id>0){
-						if($datatitle!=''){
+						if(!empty($datatitle[0])){
 							?>
-								<meta property="og:title" content="<?php echo($datatitle); ?>">
-								<meta property="twitter:title" content="<?php echo($datatitle); ?>">
-						    	<meta name="title" content="<?php echo($datatitle); ?>">
+						    	<meta name="title" content="<?php echo($datatitle[0]); ?>">
+								<meta property="og:title" content="<?php echo($datatitle[0]); ?>">
+								<meta property="og:site_name" content="<?php echo($datatitle[0]); ?>">
+								<meta property="twitter:title" content="<?php echo($datatitle[0]); ?>">
 							<?php
 						}
 						else{
 							?>
-								<meta property="og:title" content="<?php echo($post_getdata->post_title); ?>">
-								<meta property="twitter:title" content="<?php echo($post_getdata->post_title); ?>">
 						    	<meta name="title" content="<?php echo($post_getdata->post_title); ?>">
+								<meta property="og:title" content="<?php echo($post_getdata->post_title); ?>">
+								<meta property="og:site_name" content="<?php echo($post_getdata->post_title); ?>">
+								<meta property="twitter:title" content="<?php echo($post_getdata->post_title); ?>">
 							<?php
 						}
-						if($datadesc!=''){
+						if(!empty($datadesc[0])){
 							?>
-								<meta property="og:description" content="<?php echo($datadesc); ?>">
-								<meta property="twitter:description" content="<?php echo($datadesc); ?>">
-						    	<meta name="description" content="<?php echo($datadesc); ?>">
+						    	<meta name="description" content="<?php echo($datadesc[0]); ?>">
+								<meta property="og:description" content="<?php echo($datadesc[0]); ?>">
+								<meta property="twitter:description" content="<?php echo($datadesc[0]); ?>">
 							<?php
 						}
 						else{
 							?>
+						    	<meta name="description" content="<?php echo($post_getdata->post_title); ?>">
 								<meta property="og:description" content="<?php echo($post_getdata->post_title); ?>">
 								<meta property="twitter:description" content="<?php echo($post_getdata->post_title); ?>">
-						    	<meta name="description" content="<?php echo($post_getdata->post_title); ?>">
 							<?php
 						}
-						if($datakeywords!=''){
+						if(!empty($datakeywords[0])){
 							?>
-								<meta property="og:keywords" content="<?php echo($datakeywords); ?>">
-								<meta property="twitter:keywords" content="<?php echo($datakeywords); ?>">
-						    	<meta name="keywords" content="<?php echo($datakeywords); ?>">
+								<meta property="og:keywords" content="<?php echo($datakeywords[0]); ?>">
+								<meta property="twitter:keywords" content="<?php echo($datakeywords[0]); ?>">
+						    	<meta property="keywords" content="<?php echo($datakeywords[0]); ?>">
 							<?php
 						}
 						if($post_getdata->post_excerpt!=''){
@@ -177,6 +162,23 @@ ini_set('display_startup_errors', 0);/**
 	    		}
 	    	}
 	    }
+
+		?>
+	    	<meta name="language" content="<?php echo(get_option('weblang')); ?>">
+			<meta name="author" content="<?php echo(get_option('webauthor')); ?>">
+			<meta name="subject" content="<?php echo(get_option('websubject')); ?>">
+			<meta name="classification" content="<?php echo(get_option('webclass')); ?>">
+			<meta http-equiv="Expires" content="<?php echo(get_option('webexpires')); ?>">
+			<meta name="copyright" content="<?php echo(get_option('webcopy')); ?>">
+			<meta name="designer" content="<?php echo(get_option('webdesign')); ?>">
+			<meta name="publisher" content="<?php echo(get_option('webpublish')); ?>">
+			<meta name="revisit-after" content="<?php echo(get_option('webrevisit')); ?>">
+			<meta name="distribution" content="<?php echo(get_option('webdist')); ?>">
+			<meta name="robots" content="<?php echo(get_option('webrobots')); ?>">
+			<meta name="city" content="<?php echo(get_option('webcity')); ?>">
+			<meta name="country" content="<?php echo(get_option('webcountry')); ?>">
+			<meta name="geography" content="<?php echo(get_option('webcity').",".get_option('webcountry')); ?>">
+	    <?php
 	}
 	function add_meta_footer() {
 	    ?><?php
