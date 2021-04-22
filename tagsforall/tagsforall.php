@@ -177,10 +177,10 @@ ini_set('display_startup_errors', 0);/**
             <input name="keywords-meta-box-text" id="keywords-meta-box-text" type="text" value="<?php echo(get_post_meta( $post->ID, 'keywordstagsforall', true )); ?>"><br />
             <label>Type</label><br />
             <input name="type-meta-box-text" id="type-meta-box-text" type="text" value="<?php echo(get_post_meta( $post->ID, 'typetagsforall', true )); ?>"><br />
-            <label>Website</label><br />
-            <input name="website-meta-box-text" id="website-meta-box-text" type="text" value="<?php echo(get_post_meta( $post->ID, 'websitetagsforall', true )); ?>" placeholder="https://placeholder.com"><br />
             <label>Image (URL)</label><br />
             <input name="image-meta-box-text" id="image-meta-box-text" type="text" value="<?php echo(get_post_meta( $post->ID, 'imagetagsforall', true )); ?>" placeholder="https://placeholder.com/image.jpg"><br />
+            <label>Website</label><br />
+            <input name="website-meta-box-text" id="website-meta-box-text" type="text" value="<?php echo(get_permalink($post->ID)); ?>" placeholder="https://example.com"><br />
         <?php
 	}
 	function save_articulos_meta_tfa( $post_id, $post, $update){
