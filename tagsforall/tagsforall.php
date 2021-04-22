@@ -157,11 +157,10 @@ ini_set('display_startup_errors', 0);/**
 	function my_menu_tfa(){
 		add_menu_page('Tags For All', 'Tags For All', 'manage_options', 'tagsforall_menu_plugin_slug', 'output_menu_tfa','dashicons-admin-site');
 	}
-	function global_notice_meta_box() {
-
+	function global_notice_meta_box_tfa() {
 	    add_meta_box(
 	        'tagsforall-info-post',
-	        __('Open Graph Info', 'sitepoint'),
+	        'Meta Info',
 	        'global_notice_meta_box_callback',
 	        'post'
 	    );
