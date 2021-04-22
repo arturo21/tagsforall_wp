@@ -86,8 +86,6 @@ ini_set('display_startup_errors', 0);/**
 					$descriptfinal=get_option('webdesc');
 				}
 	    	?>
-	    	<meta name="description" content="<?php echo($descriptfinal); ?>">
-			<meta name="keywords" content="<?php echo esc_attr( get_option('keywordstfs') ); ?>">
 	    	<meta name="language" content="<?php echo(get_option('weblang')); ?>">
 			<meta name="author" content="<?php echo(get_option('webauthor')); ?>">
 			<meta name="subject" content="<?php echo(get_option('websubject')); ?>">
