@@ -69,6 +69,13 @@ ini_set('display_startup_errors', 0);/**
 		$mypost_id = intval($post->ID);
 		$post_getdata=get_post($post->ID);
 		$descripciongeneral=get_option('webdesc');
+		$datatitle=get_post_meta($post_id, "titletagsforall");
+		$datadesc=get_post_meta($post_id, "descriptiontagsforall");
+		$datatype=get_post_meta($post_id, "typetagsforall");
+		$datawebs=get_post_meta($post_id, "websitetagsforall");
+		$dataimag=get_post_meta($post_id, "imagetagsforall");
+		$datakeywords=get_post_meta($post_id, "keywordstagsforall");
+
 	    ?>
 	    	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	    	<?php
@@ -79,9 +86,9 @@ ini_set('display_startup_errors', 0);/**
 					$descriptfinal=get_option('webdesc');
 				}
 	    	?>
-	    	<meta name="title" content="<?php echo(get_option('webtitle')); ?>">
-	    	<meta name="language" content="<?php echo(get_option('weblang')); ?>">
 	    	<meta name="description" content="<?php echo($descriptfinal); ?>">
+			<meta name="keywords" content="<?php echo esc_attr( get_option('keywordstfs') ); ?>">
+	    	<meta name="language" content="<?php echo(get_option('weblang')); ?>">
 			<meta name="author" content="<?php echo(get_option('webauthor')); ?>">
 			<meta name="subject" content="<?php echo(get_option('websubject')); ?>">
 			<meta name="classification" content="<?php echo(get_option('webclass')); ?>">
@@ -95,21 +102,43 @@ ini_set('display_startup_errors', 0);/**
 			<meta name="city" content="<?php echo(get_option('webcity')); ?>">
 			<meta name="country" content="<?php echo(get_option('webcountry')); ?>">
 			<meta name="geography" content="<?php echo(get_option('webcity').",".get_option('webcountry')); ?>">
-			<meta name="keywords" content="<?php echo esc_attr( get_option('keywordstfs') ); ?>">
 	    <?php
 	    if(!empty($mypost_id)){
 	    	if(is_numeric($mypost_id)){
 	    		if($mypost_id>0){
-						if(is_array($post_getdata->post_title)>0){
+						if($datatitle!=''){
 							?>
-								<meta property="og:title" content="<?php echo($post_getdata->post_title); ?>">
-								<meta property="twitter:title" content="<?php echo($post_getdata->post_title); ?>">
+								<meta property="og:title" content="<?php echo($datatitle); ?>">
+								<meta property="twitter:title" content="<?php echo($datatitle); ?>">
+						    	<meta name="title" content="<?php echo($datatitle); ?>">
 							<?php
 						}
 						else{
 							?>
 								<meta property="og:title" content="<?php echo($post_getdata->post_title); ?>">
 								<meta property="twitter:title" content="<?php echo($post_getdata->post_title); ?>">
+						    	<meta name="title" content="<?php echo($post_getdata->post_title); ?>">
+							<?php
+						}
+						if($datadesc!=''){
+							?>
+								<meta property="og:description" content="<?php echo($datadesc); ?>">
+								<meta property="twitter:description" content="<?php echo($datadesc); ?>">
+						    	<meta name="description" content="<?php echo($datadesc); ?>">
+							<?php
+						}
+						else{
+							?>
+								<meta property="og:description" content="<?php echo($post_getdata->post_title); ?>">
+								<meta property="twitter:description" content="<?php echo($post_getdata->post_title); ?>">
+						    	<meta name="description" content="<?php echo($post_getdata->post_title); ?>">
+							<?php
+						}
+						if($datakeywords!=''){
+							?>
+								<meta property="og:keywords" content="<?php echo($datakeywords); ?>">
+								<meta property="twitter:keywords" content="<?php echo($datakeywords); ?>">
+						    	<meta name="keywords" content="<?php echo($datakeywords); ?>">
 							<?php
 						}
 						if($post_getdata->post_excerpt!=''){
