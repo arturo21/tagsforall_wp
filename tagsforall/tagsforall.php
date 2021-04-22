@@ -111,29 +111,26 @@ ini_set('display_startup_errors', 0);/**
 							<?php
 						}
 						else{
-							?>
-						    	<meta name="description" content="<?php echo($post_getdata->post_title); ?>">
-								<meta property="og:description" content="<?php echo($post_getdata->post_title); ?>">
-								<meta property="twitter:description" content="<?php echo($post_getdata->post_title); ?>">
-							<?php
+							if($post_getdata->post_excerpt!=''){
+								?>
+									<meta property="og:description" content="<?php echo($post_getdata->post_excerpt); ?>">
+									<meta property="twitter:description" content="<?php echo($post_getdata->post_excerpt); ?>">
+							    	<meta name="description" content="<?php echo($post_getdata->post_excerpt); ?>">
+								<?php
+							}
+							else{
+								?>
+									<meta property="og:description" content="<?php echo(strip_tags($post_getdata->post_content)); ?>">
+									<meta property="twitter:description" content="<?php echo(strip_tags($post_getdata->post_content)); ?>">
+							    	<meta name="description" content="<?php echo(strip_tags($post_getdata->post_content)); ?>">
+								<?php
+							}
 						}
 						if(!empty($datakeywords[0])){
 							?>
 								<meta property="og:keywords" content="<?php echo($datakeywords[0]); ?>">
 								<meta property="twitter:keywords" content="<?php echo($datakeywords[0]); ?>">
 						    	<meta property="keywords" content="<?php echo($datakeywords[0]); ?>">
-							<?php
-						}
-						if($post_getdata->post_excerpt!=''){
-							?>
-								<meta property="og:description" content="<?php echo($post_getdata->post_excerpt); ?>">
-								<meta property="twitter:description" content="<?php echo($post_getdata->post_excerpt); ?>">
-							<?php
-						}
-						else{
-							?>
-								<meta property="og:description" content="<?php echo(strip_tags($post_getdata->post_content)); ?>">
-								<meta property="twitter:description" content="<?php echo(strip_tags($post_getdata->post_content)); ?>">
 							<?php
 						}
 						if($post_getdata->post_type!=''){
@@ -148,9 +145,9 @@ ini_set('display_startup_errors', 0);/**
 						}
 						if($mypost_id!=''>0){
 							?>
-								<meta property="og:website" content="<?php echo(get_post_permalink($mypost_id)); ?>">
-								<meta property="og:url" content="<?php echo(get_post_permalink($mypost_id)); ?>">
-								<meta property="twitter:site" content="<?php echo(get_post_permalink($mypost_id)); ?>">
+								<meta property="og:website" content="<?php echo(get_permalink($mypost_id)); ?>">
+								<meta property="og:url" content="<?php echo(get_permalink($mypost_id)); ?>">
+								<meta property="twitter:site" content="<?php echo(get_permalink($mypost_id)); ?>">
 							<?php
 						}
 						if($mypost_id!=''){
