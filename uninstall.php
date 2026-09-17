@@ -1,31 +1,25 @@
 <?php
-
 /**
- * Fired when the plugin is uninstalled.
- *
- * When populating this file, consider the following flow
- * of control:
- *
- * - This method should be static
- * - Check if the $_REQUEST content actually is the plugin name
- * - Run an admin referrer check to make sure it goes through authentication
- * - Verify the output of $_GET makes sense
- * - Repeat with other user roles. Best directly by using the links/query string parameters.
- * - Repeat things for multisite. Once for a single site in the network, once sitewide.
- *
- * This file may be updated more in future version of the Boilerplate; however, this is the
- * general skeleton and outline for how the file should work.
- *
- * For more information, see the following discussion:
- * https://github.com/tommcfarlin/WordPress-Plugin-Boilerplate/pull/123#issuecomment-28541913
- *
- * @link       http://example.com
- * @since      1.0.0
- *
- * @package    Plugin_Name
+ * Limpieza al desinstalar Tags4All
  */
 
-// If uninstall not called from WordPress, then exit.
-if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
-	exit;
+if (!defined('WP_UNINSTALL_PLUGIN')) {
+    exit;
+}
+
+// 1. Eliminar opciones de la base de datos
+delete_option('tagsforall_options');
+
+// 2. Limpiar directorio de caché estática
+$cache_dir = WP_CONTENT_DIR . '/cache/tagsforall/';
+if (is_dir($cache_dir)) {
+    $files = glob($cache_dir . '*');
+    if (is_array($files)) {
+        foreach ($files as $file) {
+            if (is_file($file)) {
+                @unlink($file);
+            }
+        }
+    }
+    @rmdir($cache_dir);
 }
