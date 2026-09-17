@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
 }
 
 /**
- * Panel de Administración y Ajustes
+ * Panel de Administración y Ajustes de Tags4All
  */
 class AdminManager
 {
@@ -46,6 +46,7 @@ class AdminManager
         $sanitized['remove_query_strings'] = !empty($input['remove_query_strings']);
         $sanitized['remove_emoji_junk']    = !empty($input['remove_emoji_junk']);
         $sanitized['schema_geo_aeo']       = !empty($input['schema_geo_aeo']);
+        $sanitized['auto_sitemap']         = !empty($input['auto_sitemap']);
         
         $sanitized['ga4_measurement_id']   = sanitize_text_field($input['ga4_measurement_id'] ?? '');
         $sanitized['ga4_api_secret']       = sanitize_text_field($input['ga4_api_secret'] ?? '');
@@ -65,15 +66,59 @@ class AdminManager
         }
 
         $options = (array) get_option('tagsforall_options', []);
+        $sitemap_file = ABSPATH . 'sitemap.xml';
+        $sitemap_exists = file_exists($sitemap_file) && filesize($sitemap_file) > 0;
+        $sitemap_url = home_url('/sitemap.xml');
+        $url_count = get_option('tagsforall_sitemap_url_count', 0);
+        $last_gen = get_option('tagsforall_sitemap_last_generated', 0);
         ?>
         <div class="wrap">
-            <h1>🚀 Tags4All v2.0.0 — Ajustes de SEO, GEO, Caché y APIs</h1>
+            <h1>🚀 Tags4All v2.0.0 — Ajustes de SEO, GEO, Sitemap, Caché y APIs</h1>
+            
+            <?php if (isset($_GET['sitemap_rebuilt'])): ?>
+                <div class="notice notice-success is-dismissible">
+                    <p><strong>✅ Sitemap Reconstruido:</strong> El archivo <code>sitemap.xml</code> ha sido generado exitosamente con <?php echo esc_html((string)$url_count); ?> URLs catalogadas.</p>
+                </div>
+            <?php endif; ?>
+
             <form method="post" action="options.php">
                 <?php
                 settings_fields('tagsforall_options_group');
                 wp_nonce_field('save_tagsforall_settings', 'tagsforall_nonce');
                 ?>
-                <h2>Caché y Rendimiento</h2>
+
+                <h2>🗺️ Estado y Configuración de Sitemap.xml</h2>
+                <table class="form-table">
+                    <tr>
+                        <th scope="row">Sitemap.xml Automático</th>
+                        <td>
+                            <label>
+                                <input type="checkbox" name="tagsforall_options[auto_sitemap]" value="1" <?php checked(!empty($options['auto_sitemap'])); ?>>
+                                Generar y actualizar <code>sitemap.xml</code> automáticamente al instalar y al publicar contenidos.
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Estado del Sitemap</th>
+                        <td>
+                            <?php if ($sitemap_exists): ?>
+                                <p><span style="color: #2e7d32; font-weight: bold;">🟢 Creado y Activo</span> — Contiene <strong><?php echo esc_html((string)$url_count); ?></strong> URLs catalogadas.</p>
+                                <p><small>Última actualización: <?php echo $last_gen ? esc_html(date('Y-m-d H:i:s', $last_gen)) : 'Reciente'; ?></small></p>
+                                <p>
+                                    <a href="<?php echo esc_url($sitemap_url); ?>" target="_blank" class="button button-secondary">Ver sitemap.xml ↗</a>
+                                    <a href="<?php echo esc_url(wp_nonce_url(admin_url('admin-post.php?action=tagsforall_rebuild_sitemap'), 'tagsforall_rebuild_sitemap_nonce')); ?>" class="button button-primary">🔄 Reconstruir Sitemap.xml Ahora</a>
+                                </p>
+                            <?php else: ?>
+                                <p><span style="color: #c62828; font-weight: bold;">🔴 No Detectado</span> — No se encuentra el archivo físico en la raíz.</p>
+                                <p>
+                                    <a href="<?php echo esc_url(wp_nonce_url(admin_url('admin-post.php?action=tagsforall_rebuild_sitemap'), 'tagsforall_rebuild_sitemap_nonce')); ?>" class="button button-primary">⚡ Generar Sitemap.xml Ahora</a>
+                                </p>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                </table>
+
+                <h2>⚡ Caché y Rendimiento</h2>
                 <table class="form-table">
                     <tr>
                         <th scope="row">Activar Caché Estática</th>
@@ -89,7 +134,7 @@ class AdminManager
                     </tr>
                 </table>
 
-                <h2>APIs Externas</h2>
+                <h2>🔌 APIs Externas</h2>
                 <table class="form-table">
                     <tr>
                         <th scope="row">Google Analytics 4 Measurement ID</th>

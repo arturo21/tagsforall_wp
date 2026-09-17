@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Tags4All - WP Plugin for SEO, GEO & API Integration
  * Plugin URI: https://github.com/arturo21/tagsforall_wp
- * Description: Plugin avanzado de soporte SEO, GEO (Generative Engine Optimization), AEO (Answer Engine Optimization), metadatos dinámicos, caché integrada y conexión con APIs externas (GA4, Meta, YouTube, HubSpot).
+ * Description: Plugin avanzado de soporte SEO, GEO (Generative Engine Optimization), AEO (Answer Engine Optimization), metadatos dinámicos, caché integrada, sitemap XML, optimizador masivo de imágenes y conexión con APIs externas (GA4, Meta, YouTube, HubSpot).
  * Version: 2.0.0
  * Author: Arturo Vásquez
  * Author URI: https://github.com/arturo21
@@ -22,27 +22,61 @@ define('TAGSFORALL_VERSION', '2.0.0');
 define('TAGSFORALL_PATH', plugin_dir_path(__FILE__));
 define('TAGSFORALL_URL', plugin_dir_url(__FILE__));
 
-// Carga de módulos principales
-require_once TAGSFORALL_PATH . 'class-tagsforall-cache.php';
-require_once TAGSFORALL_PATH . 'class-tagsforall-seo-geo.php';
-require_once TAGSFORALL_PATH . 'class-tagsforall-performance.php';
-require_once TAGSFORALL_PATH . 'class-tagsforall-api-integrations.php';
-require_once TAGSFORALL_PATH . 'class-tagsforall-admin.php';
+// Carga segura de módulos principales desde sus subcarpetas
+$required_files = [
+    'includes/class-tagsforall-cache.php',
+    'includes/class-tagsforall-seo-geo.php',
+    'includes/class-tagsforall-performance.php',
+    'includes/class-tagsforall-api-integrations.php',
+    'includes/class-tagsforall-image-optimizer.php',
+    'includes/class-tagsforall-metabox.php',
+    'includes/class-tagsforall-sitemap.php',
+    'admin/class-tagsforall-admin.php'
+];
+
+foreach ($required_files as $file) {
+    $full_path = TAGSFORALL_PATH . $file;
+    if (file_exists($full_path)) {
+        require_once $full_path;
+    }
+}
+
+// Aliases de compatibilidad de nombres de clases
+if (!class_exists('\Tags4All\Includes\ImageOptimizer') && class_exists('\Tags4All\Includes\ImageOptimizerManager')) {
+    class_alias('\Tags4All\Includes\ImageOptimizerManager', '\Tags4All\Includes\ImageOptimizer');
+}
 
 // Inicialización de componentes del plugin
 function run_tagsforall(): void {
-    new \Tags4All\Includes\CacheManager();
-    new \Tags4All\Includes\SeoGeoManager();
-    new \Tags4All\Includes\PerformanceManager();
-    new \Tags4All\Includes\ApiIntegrationsManager();
+    if (class_exists('\Tags4All\Includes\CacheManager')) {
+        new \Tags4All\Includes\CacheManager();
+    }
+    if (class_exists('\Tags4All\Includes\SeoGeoManager')) {
+        new \Tags4All\Includes\SeoGeoManager();
+    }
+    if (class_exists('\Tags4All\Includes\PerformanceManager')) {
+        new \Tags4All\Includes\PerformanceManager();
+    }
+    if (class_exists('\Tags4All\Includes\ApiIntegrationsManager')) {
+        new \Tags4All\Includes\ApiIntegrationsManager();
+    }
+    if (class_exists('\Tags4All\Includes\ImageOptimizerManager')) {
+        new \Tags4All\Includes\ImageOptimizerManager();
+    }
+    if (class_exists('\Tags4All\Includes\SeoMetaboxManager')) {
+        new \Tags4All\Includes\SeoMetaboxManager();
+    }
+    if (class_exists('\Tags4All\Includes\SitemapManager')) {
+        new \Tags4All\Includes\SitemapManager();
+    }
     
-    if (is_admin()) {
+    if (is_admin() && class_exists('\Tags4All\Admin\AdminManager')) {
         new \Tags4All\Admin\AdminManager();
     }
 }
 run_tagsforall();
 
-// Hook de activación con inicialización defensiva de opciones
+// Hook de activación con inicialización defensiva de opciones y sitemap
 register_activation_hook(__FILE__, function(): void {
     $default_options = [
         'enable_cache'         => true,
@@ -64,4 +98,10 @@ register_activation_hook(__FILE__, function(): void {
     $existing_options = get_option('tagsforall_options', []);
     $merged_options   = array_merge($default_options, is_array($existing_options) ? $existing_options : []);
     update_option('tagsforall_options', $merged_options);
+
+    // Generación inicial del sitemap si el módulo está cargado
+    if (class_exists('\Tags4All\Includes\SitemapManager')) {
+        $sitemap_manager = new \Tags4All\Includes\SitemapManager();
+        $sitemap_manager->generateSitemap();
+    }
 });
